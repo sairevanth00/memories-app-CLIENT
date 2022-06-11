@@ -1,22 +1,58 @@
-import * as actions from "../constants/index"
-import * as api from "../api";
+import * as actions from "../constants/index";
+import * as api from "../api/index.js";
 
 // Action creators
-export const getPosts = () => async (dispatch) => {
+export const getPost = (id) => async (dispatch) => {
   try {
-    const { data } = await api.fetchPosts();
-    dispatch({ type: actions.FETCH_ALL, payload: data });
+    dispatch({ type: actions.START_LOADING });
+    const { data } = await api.fetchPost(id);
+
+    console.log(data);
+
+    dispatch({ type: actions.FETCH_POST, payload: { post: data } });
+    dispatch({ type: actions.END_LOADING });
   } catch (error) {
     console.log(error);
   }
 };
 
-export const createPost = (post) => async (dispatch) => {
+export const getPosts = (page) => async (dispatch) => {
   try {
-    const { data } = await api.createPost(post);
-    dispatch({ type: actions.CREATE, payload: data });
+    dispatch({ type: actions.START_LOADING });
+    const { data } = await api.fetchPosts(page);
+
+    console.log(data);
+
+    dispatch({ type: actions.FETCH_ALL, payload: data });
+    dispatch({ type: actions.END_LOADING });
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getPostsBySearch = (searchQuery) => async (dispatch) => {
+  try {
+    dispatch({ type: actions.START_LOADING });
+    const {
+      data: { data },
+    } = await api.fetchPostsBySearch(searchQuery);
+    console.log("Data :", data);
+    dispatch({ type: actions.FETCH_BY_SEARCH, payload: data });
+    dispatch({ type: actions.END_LOADING });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const createPost = (post, navigate) => async (dispatch) => {
+  try {
+    dispatch({ type: actions.START_LOADING });
+    const { data } = await api.createPost(post);
+    navigate(`/posts/${data._id}`);
+    dispatch({ type: actions.CREATE, payload: data });
+    dispatch({ type: actions.END_LOADING });
+  } catch (error) {
+    console.log("Error :" + error);
   }
 };
 
@@ -41,7 +77,7 @@ export const deletePost = (id) => async (dispatch) => {
 export const likePost = (id) => async (dispatch) => {
   try {
     const { data } = await api.likePost(id);
-    dispatch({ type: actions.UPDATE, payload: data });
+    dispatch({ type: actions.LIKE, payload: data });
   } catch (error) {
     console.log(error);
   }
