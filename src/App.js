@@ -20,7 +20,7 @@ const App = () => {
           <Route
             path="/auth"
             exact
-            element={!user ? <Auth /> : <Navigate replace to="/posts" />}
+            element={user ? <Navigate replace to="/posts" /> : <Auth />}
           />
         </Routes>
       </Container>

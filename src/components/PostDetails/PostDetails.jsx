@@ -8,12 +8,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { useParams, useNavigate } from "react-router-dom";
-
-import { getPost, getPostsBySearch } from "../../actions/posts";
+import CommentSection from "./CommentSection";
+import { getPost } from "../../actions/posts";
 import useStyles from "./styles";
 
 const PostDetails = () => {
   const { post, posts, isLoading } = useSelector((state) => state.posts);
+  console.log(posts);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const classes = useStyles();
@@ -21,7 +22,7 @@ const PostDetails = () => {
 
   useEffect(() => {
     dispatch(getPost(id));
-  }, [id]);
+  }, [id, dispatch]);
 
   // useEffect(() => {
   //   if (post) {
@@ -43,7 +44,9 @@ const PostDetails = () => {
     );
   }
 
-  const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
+  const recommendedPosts = posts.filter(
+    ({ creator }) => creator !== post.creator,
+  );
 
   return (
     <Paper style={{ padding: "20px", borderRadius: "15px" }} elevation={6}>
@@ -72,9 +75,7 @@ const PostDetails = () => {
             <strong>Realtime Chat - coming soon!</strong>
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
-          <Typography variant="body1">
-            <strong>Comments - coming soon!</strong>
-          </Typography>
+          <CommentSection post={post} />
           <Divider style={{ margin: "20px 0" }} />
         </div>
         <div className={classes.imageSection}>
@@ -114,7 +115,7 @@ const PostDetails = () => {
                   <Typography gutterBottom variant="subtitle1">
                     Likes: {likes.length}
                   </Typography>
-                  <img src={selectedFile} width="200px" />
+                  <img alt="selected img" src={selectedFile} width="200px" />
                 </div>
               ),
             )}

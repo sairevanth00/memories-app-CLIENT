@@ -18,7 +18,7 @@ export default makeStyles({
     flexDirection: "column",
     justifyContent: "space-between",
     borderRadius: "15px",
-    height: "100%",
+    height: "350px",
     position: "relative",
   },
   overlay: {
@@ -39,15 +39,54 @@ export default makeStyles({
   details: {
     display: "flex",
     justifyContent: "space-between",
-    margin: "20px",
+    flexWrap: 'wrap',
+    marginBottom: '8px',
+    // padding: "0px 12px 0px 12px",
   },
   title: {
-    padding: "0 16px",
+    // padding: "12px",
+    position: "absolute",
+    flexWrap: "wrap",
   },
   cardActions: {
     cursor: "pointer",
-    padding: "0 16px 8px 16px",
+    // padding: "12px",
     display: "flex",
     justifyContent: "space-between",
+    position: "",
   },
+  titTags: {
+    display: "flex",
+    flexDirection: "column",
+    padding: "5px 12px 12px 12px",
+  },
+  modal_content: {
+    // height: "40%",
+    // width: "40%",
+  },
+  closeBtnCon: {
+    display: 'flex',
+    justifyContent: "flex-end",
+    backgroundColor: "transparent",
+  },
+  trigger_button: {
+    padding: "2px",
+    paddingBottom:" 0px",
+    marginBottom: "4px",
+    border:" 0px",
+    backgroundColor: "#eeeaead2",
+    cursor: "pointer",
+  },
+  popupBtnCon: {
+    display: 'flex', 
+    justifyContent: "end",
+  },
+  popupTxt: {
+    fontFamily: "Roboto",
+    textAlign: "center",
+  },
+  popupMainCon: {
+    height: "100%",
+    width: "40%",
+  }
 });

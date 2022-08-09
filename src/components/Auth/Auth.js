@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import LockOutlinedIcon from "@material-ui/icons/LockOpenOutlined";
 import Input from "./Input";
 import { signup, signin } from "../../actions/auth";
+// import { isError } from "../../actions/auth";
 import useStyles from "./styles";
 
 const initialState = {
@@ -28,6 +29,7 @@ const initialState = {
 const Auth = () => {
   const [formData, setFormData] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const classes = useStyles();
@@ -40,16 +42,16 @@ const Auth = () => {
     setFormData(initialState);
     setIsSignup((prevIsSignUp) => !prevIsSignUp);
     setShowPassword(false);
+    setErrorMsg("");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
 
     if (isSignup) {
-      dispatch(signup(formData, navigate));
+      dispatch(signup(formData, navigate, setErrorMsg)); //.error((e) => setErrorMsg(e.message));
     } else {
-      dispatch(signin(formData, navigate));
+      dispatch(signin(formData, navigate, setErrorMsg));
     }
   };
 
@@ -99,8 +101,11 @@ const Auth = () => {
     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
       theme: "outline",
       size: "large",
+      type: "standard",
+      shape: "rectangular",
+      width: "362",
     });
-  }, []);
+  }, [handleCallbackResponse]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -149,6 +154,12 @@ const Auth = () => {
                 type="password"
               />
             )}
+            <Typography
+              variant="h5"
+              style={{ color: "red", fontSize: "15px", paddingLeft: "10px" }}
+            >
+              {errorMsg}
+            </Typography>
           </Grid>
           <Button
             type="submit"
@@ -178,17 +189,11 @@ const Auth = () => {
             onFailure={googleFailure}
             cookiePolicy="single_host_origin"
           /> */}
-          <div
-            style={{
-              width: "100%",
-            }}
-            id="signInDiv"
-            // startIcon={<Icon />}
-          ></div>
+          <div id="signInDiv">Google login</div>
         </form>
         <Grid container justifyContent="flex-end">
           <Grid item>
-            <Button onClick={switchMode}>
+            <Button onClick={switchMode} color="secondary">
               {isSignup
                 ? "Already have an account? Sign In"
                 : "Don't have an account? Sign Up"}

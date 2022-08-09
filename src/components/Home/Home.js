@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import { useNavigate, useLocation } from "react-router-dom";
 import ChipInput from "material-ui-chip-input";
-import { getPosts, getPostsBySearch } from "../../actions/posts";
+import {getPostsBySearch } from "../../actions/posts";
 import Pagination from "../Pagination";
 import Form from "../Form/Form";
 import Posts from "../Posts/Posts";
@@ -28,7 +28,6 @@ const Home = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const query = useQuery();
 
   const page = query.get("page") || 1;
@@ -38,8 +37,12 @@ const Home = () => {
   const searchPost = () => {
     if (search.trim() || tags) {
       // dispatch -> fetch search post
+      console.log({ search, tags: tags.join(",") })
       dispatch(getPostsBySearch({ search, tags: tags.join(",") }));
-    } else {
+      navigate(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
+    }
+    if(!search && !tags.length) {
+      console.log("Redirect to Home page")
       navigate("/");
     }
   };

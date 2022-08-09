@@ -25,6 +25,7 @@ const Form = ({ currentId, setCurrentId }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (post) setPostData(post);
+    console.log("postData :",postData)
   }, [post]);
 
   const clear = () => {
